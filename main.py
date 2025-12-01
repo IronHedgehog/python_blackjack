@@ -46,12 +46,19 @@ while play:
             for number in computer_score:
                 final_computer_score += number
     else:
-        print(f"Your final hand: {user_numbers}, final score: {final_score}")
-        print(f"Computer's final hand: {computer_score}, final score: {final_computer_score}")
+        final_computer_score = 0
+        computer_score.append(random.choice(scores))
+        for number in computer_score:
+            final_computer_score += number
+
         if final_computer_score > 21:
+            print(f"Your final hand: {user_numbers}, final score: {final_score}")
+            print(f"Computer's final hand: {computer_score}, final score: {final_computer_score}")
             print("Opponent went over.You win 😁")
         elif final_computer_score < final_score:
-            print("You win 😁")
+            print(f"Your final hand: {user_numbers}, final score: {final_score}")
+            print(f"Computer's final hand: {computer_score}, final score: {final_computer_score}")
+            print("Opponent went over.You win 😁")
         else:
             print("You went over. You lose 😭")
         play = False
