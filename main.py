@@ -1,6 +1,7 @@
 import random
 
 # scores = [1,2,3,4,5,6,7,8,9,10]
+
 #
 # final_score = 0
 #
@@ -63,41 +64,80 @@ import random
 #             print("You went over. You lose 😭")
 #         play = False
 
+#
 
-cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
-
-final_scores = {
-    "user": 0,
-    "computer": 0,
-}
-
-hands = {
-    "computer_hand": [],
-    "user_hand": [],
-}
-
-hands["user_hand"].append(random.choices(cards, k=2))
-hands["computer_hand"].append(random.choice(cards))
+import random
 
 
-def calculate_score(who):
-    final_score = 0
+CARDS = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
-    if who == "user":
-        for hand in hands["user_hand"][0]:
-            print(hand)
-            final_score += hand
-    elif who == "computer":
-        for hand in hands["computer_hand"]:
-            print(hand)
-            final_score += hand
+
+def deal_card():
+
+    return random.choice(CARDS)
+
+
+def calculate_score(hand):
+
+    score = sum(hand)
+
+
+    if score > 21 and 11 in hand:
+        hand[hand.index(11)] = 1
+        score = sum(hand)
+
+    return score
+
+
+def print_current_state(user_hand, comp_hand, final=False):
+    if final:
+        print(f"Your final hand: {user_hand}, score: {calculate_score(user_hand)}")
+        print(f"Computer final hand: {comp_hand}, score: {calculate_score(comp_hand)}")
     else:
-        return "Invalid input"
-
-    return  final_score
-
-
-def add_to_hands():
+        print(f"Your cards: {user_hand}, current score: {calculate_score(user_hand)}")
+        print(f"Computer’s first card: {comp_hand[0]}")
 
 
-print(calculate_score("c"))
+
+user_hand = [deal_card(), deal_card()]
+computer_hand = [deal_card()]
+
+game_over = False
+
+print_current_state(user_hand, computer_hand)
+
+
+while not game_over:
+    if calculate_score(user_hand) > 21:
+        game_over = True
+        break
+
+    action = input("Type 'y' to get another card, 'n' to pass: ").lower()
+
+    if action == "y":
+        user_hand.append(deal_card())
+        print_current_state(user_hand, computer_hand)
+    else:
+        game_over = True
+
+
+while calculate_score(computer_hand) < 17:
+    computer_hand.append(deal_card())
+
+
+print_current_state(user_hand, computer_hand, final=True)
+
+user_score = calculate_score(user_hand)
+comp_score = calculate_score(computer_hand)
+
+
+if user_score > 21:
+    print("You went over. You lose 😭")
+elif comp_score > 21:
+    print("Computer went over. You win 😁")
+elif user_score > comp_score:
+    print("You win 😎")
+elif user_score < comp_score:
+    print("You lose 😭")
+else:
+    print("Draw 🙃")
